@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder';
-import sanityClient from '@sanity/client';
+import sanityClient from 'picosanity';
 
 import {
 	DEFAULT_BLUR_UP_AMOUNT,
@@ -15,6 +15,7 @@ import {
 	SanityImageHotspot,
 	SanityImageObject
 } from '@sanity/image-url/lib/types/types';
+import { imageConfigDefault } from 'next/dist/server/image-config';
 
 const PROJECT_ID = 'PROJECTID';
 const DATASET = 'DATASET';
@@ -257,7 +258,12 @@ describe('useNextSanityImage', () => {
 		const { result } = renderHook(() => useNextSanityImage(configuredSanityClient, image));
 
 		const width = 300;
-		const loaderResult = result.current.loader({ src: '', width });
+		const imageConfig = {
+			...imageConfigDefault,
+			allSizes: []
+		};
+
+		const loaderResult = result.current.loader({ src: '', width, config: imageConfig });
 
 		expect(loaderResult).toEqual(
 			generateSanityImageUrl(`?w=${width}&q=75&fit=clip&auto=format`)
