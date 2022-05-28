@@ -10,6 +10,7 @@
     "dist"
   ],
   "scripts": {
+    "prepack": "yarn build",
     "prepare": "npm run build",
     "build": "rollup -c",
     "test": "jest"
